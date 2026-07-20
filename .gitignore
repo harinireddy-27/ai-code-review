@@ -1,0 +1,5 @@
+.env
+venv/
+__pycache__/
+AI_Code_Review_Report.pdf
+AI_Code_Review_Report.txt
