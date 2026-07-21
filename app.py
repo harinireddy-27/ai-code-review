@@ -208,6 +208,66 @@ if st.button("🧹 Clear Code"):
 # ---------------------------------
 # Review Button
 # ---------------------------------
+st.divider()
+
+st.subheader("💻 AI Code Generator")
+
+generation_prompt = st.text_area(
+    "Describe the code you want",
+    placeholder="Example: Write a Python program to implement Binary Search."
+)
+
+if st.button("🚀 Generate Code"):
+
+    if generation_prompt.strip() == "":
+        st.warning("Please enter a prompt.")
+
+    else:
+
+        with st.spinner("Generating code..."):
+
+            prompt = f"""
+You are an expert {language} programmer.
+
+Generate clean, professional, well-commented {language} code.
+
+Requirements:
+- Write only the code.
+- Add meaningful comments.
+- Follow best coding practices.
+- Do not explain anything outside the code.
+
+User Request:
+
+{generation_prompt}
+"""
+
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            )
+
+            generated_code = response.choices[0].message.content
+
+            st.success("✅ Code Generated Successfully")
+
+            st.code(generated_code, language.lower())
+
+            st.download_button(
+                "⬇ Download Generated Code",
+                generated_code,
+                file_name=f"generated_code.{language.lower()}",
+                mime="text/plain"
+            )
+
+            if st.button("Use Generated Code for Review"):
+                st.session_state.generated_code = generated_code
+                st.rerun()
 # ---------------------------------
 # Review Button
 # ---------------------------------
